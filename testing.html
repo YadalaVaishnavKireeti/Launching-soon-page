@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Investment Hub</title>
+
+<style>
+  body {
+    margin: 0;
+    background: #faf9f7;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+  }
+
+  .top-text {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 60px;
+    min-height: 40px;
+    background: linear-gradient(90deg, #ff7a00, #ffca00, #ff0077, #7f00ff, #00c6ff);
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: hueShift 4s linear infinite;
+    transition: opacity 0.4s ease;
+  }
+
+  @keyframes hueShift {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+  }
+
+  /* --- main layout --- */
+  .main-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 1100px;
+    height: auto;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+
+  /* --- left graphic section --- */
+  .graphic-area {
+    position: relative;
+    width: 480px;
+    height: 300px;
+    flex-shrink: 0;
+    margin-left: -35px;
+    overflow: hidden;
+  }
+
+  .heap-image {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* 🪙 larger coin image */
+  .coin {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background-image: url('gold-coin.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: fall 1.2s ease-in forwards;
+  }
+
+  /* falling animation */
+  @keyframes fall {
+    0%   { transform: translateY(-220px) rotate(0deg); opacity: 1; }
+    80%  { transform: translateY(150px) rotate(360deg); opacity: 1; }
+    100% { transform: translateY(155px) rotate(420deg); opacity: 0; }
+  }
+
+  /* --- right text --- */
+  .right-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 15px;
+    color: #333;
+  }
+
+  .launch-text {
+    font-size: 26px;
+    font-weight: bold;
+    color: #444;
+  }
+
+  .compliments {
+    font-size: 18px;
+    opacity: 0.9;
+  }
+
+  .signature {
+    font-size: 18px;
+    color: #444;
+    font-weight: 600;
+  }
+
+  /* --- responsive breakpoints --- */
+  @media (max-width: 900px) {
+    .main-content {
+      flex-direction: column;
+      gap: 40px;
+      height: auto;
+    }
+    .graphic-area {
+      width: 90%;
+      height: 260px;
+      margin-left: 0;
+    }
+    .coin {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding-top: 30px;
+    }
+    .top-text {
+      font-size: 22px;
+      margin-bottom: 40px;
+    }
+    .graphic-area {
+      width: 100%;
+      height: 240px;
+      margin-left: 0;
+    }
+    .coin {
+      width: 60px;
+      height: 60px;
+    }
+    .launch-text {
+      font-size: 22px;
+      text-align: center;
+      width: 100%;
+    }
+    .right-text {
+      align-items: center;
+      text-align: center;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-text">Your Investment Hub for</div>
+
+<div class="main-content">
+  <!-- Left: heap + coins -->
+  <div class="graphic-area">
+    <img src="coin-heap.png" alt="Coin Heap" class="heap-image" />
+    <div id="coinContainer"></div>
+  </div>
+
+  <!-- Right: text -->
+  <div class="right-text">
+    <div class="launch-text">Launching Soon!!</div>
+    <div class="compliments">
+      Personalised solutions from Pradeep<br>
+    </div>
+  </div>
+</div>
+
+<script>
+// --- Rotating heading ---
+const items = [
+  "Your Investment Hub for",
+  "Mutual Funds",
+  "Small Savings",
+  "Life Insurance",
+  "Health Insurance"
+];
+let index = 0;
+const topText = document.querySelector(".top-text");
+setInterval(() => {
+  index = (index + 1) % items.length;
+  topText.style.opacity = 0;
+  setTimeout(() => {
+    topText.textContent = items[index];
+    topText.style.opacity = 1;
+  }, 300);
+}, 1500);
+
+// --- Falling coins ---
+const container = document.getElementById("coinContainer");
+function spawnCoin() {
+  const coin = document.createElement("div");
+  coin.className = "coin";
+
+  // limit horizontal spawn range (avoid extreme edges)
+  const areaWidth = container.offsetWidth || 420;
+  const coinWidth = 90;
+  const leftMin = 40; // safe left margin
+  const leftMax = areaWidth - coinWidth - 40; // safe right margin
+  const leftPos = Math.floor(Math.random() * (leftMax - leftMin + 1)) + leftMin;
+
+  coin.style.left = leftPos + "px";
+  container.appendChild(coin);
+  setTimeout(() => coin.remove(), 1200);
+}
+
+// ⏳ delay between new coins (moderate)
+setInterval(spawnCoin, 900);
+</script>
+
+</body>
+</html>
